@@ -7,15 +7,10 @@ module Doorkeeper
     include Dynamoid::Document
 
     include AccessTokenMixin
-
-    safe
-    timestamps!
-
-    set_collection_name 'oauth_access_tokens'
+    table name: :oauth_access_tokens, key: :token, read_capacity: 5, write_capacity: 5
 
     field :resource_owner_id, :serialized
     field :application_id,    :serialized
-    field :token,             :string
     field :refresh_token,     :string
     field :expires_in,        :integer
     field :revoked_at,        :datetime
@@ -30,11 +25,6 @@ module Doorkeeper
                  resource_owner_id: resource_owner.id)
     end
     private_class_method :delete_all_for
-
-    def self.create_indexes
-      ensure_index :token, unique: true
-      ensure_index [[:refresh_token, 1]], unique: true, sparse: true
-    end
 
     def self.order_method
       :sort

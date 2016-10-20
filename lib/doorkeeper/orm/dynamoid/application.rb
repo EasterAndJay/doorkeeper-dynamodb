@@ -3,16 +3,12 @@ module Doorkeeper
     include Dynamoid::Document
 
     include ApplicationMixin
+    table name: :oauth_applications, key: :uid, read_capacity: 5, write_capacity: 5
 
-    safe
-    timestamps!
+    has_many :authorized_tokens, class: Doorkeeper::AccessToken
 
-    set_collection_name 'oauth_applications'
-
-    many :authorized_tokens, class_name: 'Doorkeeper::AccessToken'
-
-    field :name,         :string
     field :uid,          :string
+    field :name,         :string
     field :secret,       :string
     field :redirect_uri, :string
     field :scopes,       :string
@@ -23,10 +19,6 @@ module Doorkeeper
           revoked_at: nil
         ).map(&:application_id)
       find(ids)
-    end
-
-    def self.create_indexes
-      ensure_index :uid, unique: true
     end
   end
 end

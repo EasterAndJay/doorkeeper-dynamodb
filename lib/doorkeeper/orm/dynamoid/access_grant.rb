@@ -6,9 +6,8 @@ module Doorkeeper
     include Dynamoid::Document
     include AccessGrantMixin
 
-    set_collection_name 'oauth_access_grants'
+    table name: :oauth_access_grants, key: :resource_owner_id, read_capacity: 5, write_capacity: 5
 
-    field :resource_owner_id, :serialized
     field :application_id,    :serialized
     field :scopes,            :string
     field :expires_in,        :integer

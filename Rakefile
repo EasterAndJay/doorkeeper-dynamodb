@@ -32,13 +32,9 @@ task :copy_and_run_doorkeeper_specs do
   # Replace ORM-independent files (configs, models, etc)
   FileUtils.cp_r('spec/stubs/spec_helper_integration.rb', 'spec/spec_helper_integration.rb')
   FileUtils.cp_r('spec/stubs/models/user.rb', 'spec/dummy/app/models/user.rb')
-  FileUtils.cp_r('spec/stubs/config/initializers/db.rb', 'spec/dummy/config/initializers/db.rb')
   FileUtils.cp_r('spec/stubs/config/application.rb', 'spec/dummy/config/application.rb')
-  FileUtils.cp_r('spec/stubs/support/sequel.rb', 'spec/support/orm/sequel.rb')
+  FileUtils.cp_r('spec/stubs/support/dynamoid.rb', 'spec/support/orm/dynamoid.rb')
   FileUtils.rm('spec/dummy/config/initializers/active_record_belongs_to_required_by_default.rb')
-  # Generators
-  FileUtils.rm(Dir.glob('spec/generators/*.rb'))
-  FileUtils.cp_r(Dir.glob('spec/stubs/generators/*.rb'), 'spec/generators/')
   # Run specs
   `bundle exec rspec`
 end
@@ -46,7 +42,7 @@ end
 desc 'Default: run specs.'
 task default: :spec
 
-desc 'Clone doorkeeper specs, prepare it for Sequel and run'
+desc 'Clone doorkeeper specs, prepare it for run'
 task spec: :copy_and_run_doorkeeper_specs
 
 RSpec::Core::RakeTask.new(:spec) do |config|
