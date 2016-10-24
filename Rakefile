@@ -33,8 +33,9 @@ task :copy_and_run_doorkeeper_specs do
   FileUtils.cp_r('spec/stubs/spec_helper_integration.rb', 'spec/spec_helper_integration.rb')
   FileUtils.cp_r('spec/stubs/models/user.rb', 'spec/dummy/app/models/user.rb')
   FileUtils.cp_r('spec/stubs/config/application.rb', 'spec/dummy/config/application.rb')
-  FileUtils.cp_r('spec/stubs/support/dynamoid.rb', 'spec/support/orm/dynamoid.rb')
+  FileUtils.cp_r('spec/stubs/support/orm/dynamoid.rb', 'spec/support/orm/dynamoid.rb')
   FileUtils.rm('spec/dummy/config/initializers/active_record_belongs_to_required_by_default.rb')
+  FileUtils.rm('spec/support/orm/active_record.rb')
   # Run specs
   `bundle exec rspec`
 end
