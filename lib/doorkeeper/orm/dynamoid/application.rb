@@ -1,8 +1,14 @@
+require 'doorkeeper-dynamodb/compatible'
+
 module Doorkeeper
   class Application
+    include DoorkeeperDynamodb::Compatible
     include OAuth::Helpers
+    include Models::Expirable
+    include Models::Revocable
+    include Models::Accessible
     include Models::Scopes
-    include ActiveModel::MassAssignmentSecurity if defined?(::ProtectedAttributes)
+
     include Dynamoid::Document
     table name: :oauth_applications, key: :uid, read_capacity: 5, write_capacity: 5
     has_many :authorized_tokens, class_name: 'Doorkeeper::AccessToken'
