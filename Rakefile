@@ -2,17 +2,10 @@ require 'bundler/setup'
 require 'rspec/core/rake_task'
 
 def clear_specs
-  base_dir = File.join(Dir.pwd, 'spec')
-  Dir.foreach(base_dir) do |file|
-    next if %w(. .. stubs).include?(file)
-
-    file_name = File.join(base_dir, file)
-    if File.directory?(file_name)
-      FileUtils.rm_rf(file_name)
-    else
-      File.delete(file_name)
-    end
-  end
+  files = Dir["#{File.join(Dir.pwd, 'spec')}/**/*"]
+  files.each {|f| puts f }
+  # files.reject {|f|  }
+  # FileUtils.rm_rf("#{base_dir}/.", secure: true) if Dir.exist?(base_dir)
 end
 
 desc 'Update Git submodules.'
