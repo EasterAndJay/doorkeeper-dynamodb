@@ -17,12 +17,13 @@ Gem::Specification.new do |s|
   s.files = Dir["lib/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["spec/**/*"]
 
-  s.add_dependency "doorkeeper"
-  s.add_dependency "dynamoid"
+  s.add_runtime_dependency 'dynamoid', '~> 1.3.0'
+  s.add_runtime_dependency 'doorkeeper', '~> 4.0', '>= 4.0.0'
 
-  s.add_development_dependency "rspec-rails", "~> 3.4.0"
-  s.add_development_dependency "capybara", "~> 2.3.0"
-  s.add_development_dependency "generator_spec", "~> 0.9.0"
-  s.add_development_dependency "factory_girl", "~> 4.5.0"
-  s.add_development_dependency "timecop", "~> 0.7.0"
+  s.add_development_dependency 'rspec-rails', '~> 3.4', '>= 3.4.0'
+  s.add_development_dependency 'capybara', '~> 2.7', '>= 2.7.0'
+  s.add_development_dependency 'generator_spec', '~> 0.9.0'
+  s.add_development_dependency 'factory_girl', '~> 4.7', '>= 4.7.0'
+  s.add_development_dependency 'timecop', '~> 0.8.0'
+  s.add_development_dependency 'pry'
 end

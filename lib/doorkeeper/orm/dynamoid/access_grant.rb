@@ -9,7 +9,7 @@ module Doorkeeper
     include Models::Accessible
     include Models::Scopes
 
-    include Dynamoid::Document
+    include ::Dynamoid::Document
     table name: :oauth_access_grants, key: :token, read_capacity: 5, write_capacity: 5
     field :application_id,    :serialized
     field :resource_owner_id, :serialized
