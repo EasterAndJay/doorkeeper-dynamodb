@@ -2,10 +2,8 @@ require 'bundler/setup'
 require 'rspec/core/rake_task'
 
 def clear_specs
-  files = Dir["#{File.join(Dir.pwd, 'spec')}/**/*"]
-  files.each {|f| puts f }
-  # files.reject {|f|  }
-  # FileUtils.rm_rf("#{base_dir}/.", secure: true) if Dir.exist?(base_dir)
+  base_path = File.join(Dir.pwd, 'spec')
+  FileUtils.rm_rf(base_path) if File.exist?(base_path)
 end
 
 desc 'Update Git submodules.'
@@ -23,10 +21,10 @@ task :copy_and_run_doorkeeper_specs do
   end
   `cp -r -n doorkeeper/spec .`
   # Replace ORM-independent files (configs, models, etc)
-  FileUtils.cp_r('spec/stubs/spec_helper_integration.rb', 'spec/spec_helper_integration.rb')
-  FileUtils.cp_r('spec/stubs/models/user.rb', 'spec/dummy/app/models/user.rb')
-  FileUtils.cp_r('spec/stubs/config/application.rb', 'spec/dummy/config/application.rb')
-  FileUtils.cp_r('spec/stubs/support/orm/dynamoid.rb', 'spec/support/orm/dynamoid.rb')
+  FileUtils.cp_r('stubs/spec_helper_integration.rb', 'spec/spec_helper_integration.rb')
+  FileUtils.cp_r('stubs/models/user.rb', 'spec/dummy/app/models/user.rb')
+  FileUtils.cp_r('stubs/config/application.rb', 'spec/dummy/config/application.rb')
+  FileUtils.cp_r('stubs/support/orm/dynamoid.rb', 'spec/support/orm/dynamoid.rb')
   FileUtils.rm('spec/dummy/config/initializers/active_record_belongs_to_required_by_default.rb')
   FileUtils.rm('spec/support/orm/active_record.rb')
   # Run specs

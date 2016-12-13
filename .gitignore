@@ -8,4 +8,4 @@ gemfiles/*.lock
 *.swp
 .idea
 spec
-!spec/stubs/
+.DS_Store
