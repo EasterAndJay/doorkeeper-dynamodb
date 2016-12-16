@@ -10,27 +10,21 @@ module Doorkeeper
     include Models::Scopes
 
     include Dynamoid::Document
-    table name: :oauth_access_tokens, key: :token, read_capacity: 5, write_capacity: 5
-    field :resource_owner_id, :serialized
-    field :application_id,    :serialized
+    table name: :oauth_access_tokens
+    field :resource_owner_id, :string
     field :refresh_token,     :string
     field :expires_in,        :integer
-    field :revoked_at,        :datetime
     field :scopes,            :string
 
-    belongs_to :application, class_name: 'Doorkeeper::Application'
+    range :revoked_at,        :datetime
+    range :created_at,        :datetime
+    range :updated_at,        :datetime
+
+    belongs_to :application, class_name: 'Doorkeeper::Application', :inverse_of => :tokens
     attr_writer :use_refresh_token
     before_validation :generate_refresh_token, on: :create, if: :use_refresh_token?
 
-    module ClassMethods
-      def by_token(token)
-        find(token.to_s)
-      end
-
-      def by_refresh_token(refresh_token)
-        where(refresh_token: refresh_token.to_s)
-      end
-
+    class << self
       def revoke_all_for(application_id, resource_owner)
         where(application_id: application_id,
               resource_owner_id: resource_owner.id,
@@ -75,14 +69,6 @@ module Doorkeeper
           use_refresh_token: use_refresh_token
         )
       end
-
-      def last_authorized_token_for(application_id, resource_owner_id)
-        where(application_id: application_id,
-              resource_owner_id: resource_owner_id,
-              revoked_at: nil)
-          .send(order_method, created_at_desc)
-          .first
-      end
     end
 
     def application_id?
@@ -102,7 +88,7 @@ module Doorkeeper
         resource_owner_id: resource_owner_id,
         scopes: scopes,
         expires_in_seconds: expires_in_seconds,
-        application: { uid: application.try(:uid) },
+        application: { id: application.try(:id) },
         created_at: created_at.to_i
       }
     end

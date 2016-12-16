@@ -15,12 +15,13 @@ Aws.config.update({
 })
 
 Dynamoid.configure do |config|
+  config.adapter = 'aws_sdk_v2'
   config.endpoint = "http://127.0.0.1:8000"
   config.namespace = "dynamoid_tests"
   config.warn_on_scan = false
+  config.read_capacity = 5 # Read capacity for your tables
+  config.write_capacity = 5 # Write capacity for your tables
 end
-
-Dynamoid.logger.level = Logger::FATAL
 
 module DynamoidReset
   def self.all
@@ -35,6 +36,8 @@ module DynamoidReset
     Dynamoid.included_models.each(&:create_table)
   end
 end
+
+Dynamoid.logger.level = Logger::FATAL
 
 RSpec.configure do |config|
   config.before(:each) do
